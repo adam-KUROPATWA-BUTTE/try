@@ -23,4 +23,12 @@ public class General extends Character implements Roman, Combatant, Dirigeant {
     public void manage() {
         System.out.println(this.getName() + " redirects funds to his army.");
     }
+    
+    /**
+     * General bonus: +40% attack, tactical command
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 40; // +40% attack
+    }
 }

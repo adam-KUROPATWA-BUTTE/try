@@ -18,17 +18,29 @@ class BattlefieldTest {
         public RomanCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
+        }
     }
     
     static class GaulCharacter extends Character implements Gaul {
         public GaulCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
+        }
     }
     
     static class NeutralCharacter extends Character {
         public NeutralCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
+        }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
         }
     }
 

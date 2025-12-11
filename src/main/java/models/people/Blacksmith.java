@@ -13,4 +13,12 @@ public class Blacksmith extends Character implements Gaul, Worker {
     public void work() {
         System.out.println(this.getName() + " hits his hammer on hot iron.");
     }
+    
+    /**
+     * Blacksmith bonus: +30% attack damage, craft weapons
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 30; // +30% attack damage
+    }
 }

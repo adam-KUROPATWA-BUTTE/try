@@ -13,4 +13,13 @@ public class Prefect extends Character implements Roman, Dirigeant {
     public void manage() {
         System.out.println(this.getName() + " does nothing.");
     }
+    
+    /**
+     * Prefect bonus: Leadership (+15% to allies)
+     * No direct combat bonus
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 0;
+    }
 }

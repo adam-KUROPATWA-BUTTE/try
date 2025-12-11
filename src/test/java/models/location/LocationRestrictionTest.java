@@ -17,20 +17,36 @@ class LocationRestrictionTest {
         public RomanCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
+        }
     }
     static class GauloisCharacter extends Character implements Gaulois {
         public GauloisCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
+        }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
         }
     }
     static class LycanthropeCharacter extends Character implements Lycanthrope {
         public LycanthropeCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
+        }
     }
     static class NeutralCharacter extends Character {
         public NeutralCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
+        }
+        @Override
+        protected int getCombatBonus() {
+            return 0;
         }
     }
 

@@ -91,42 +91,75 @@ public class SetupController implements Initializable {
         // Create default locations
         Location gaulVillage = new Location("Asterix's Village", 150.0, LocationType.GAUL_TOWN);
         Location romanCamp = new Location("Aquarium Camp", 200.0, LocationType.ROMAIN_CAMP);
+        Location romanCity = new Location("Rome", 300.0, LocationType.ROMAIN_TOWN);
         Battlefield battlefield = new Battlefield("Forest Battlefield", 300.0);
         Location gaulRomanTown = new Location("Lutetia", 250.0, LocationType.GAUL_ROMAIN_VILLAGE);
         Location enclosure = new Location("Dark Forest", 180.0, LocationType.ENCLOSURE);
         
         theater.addLocation(gaulVillage);
         theater.addLocation(romanCamp);
+        theater.addLocation(romanCity);
         theater.addLocation(battlefield);
         theater.addLocation(gaulRomanTown);
         theater.addLocation(enclosure);
         
-        // Add characters to Gaul Village
-        Character asterix = CharacterFactory.createCharacter(
-            CharacterFactory.CharacterType.DRUID, "Asterix", 'm', 1.60, 35, 0.9);
-        Character obelix = CharacterFactory.createCharacter(
-            CharacterFactory.CharacterType.BLACKSMITH, "Obelix", 'm', 2.00, 35, 0.95);
-        Character getafix = CharacterFactory.createCharacter(
+        // Add characters to Gaul Village: 1 Merchant, 1 Innkeeper, 1 Blacksmith, 1 Druid
+        Character merchant = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.MERCHANT, "Economix", 'm', 1.65, 40, 0.6);
+        Character innkeeper = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.INNKEEPER, "Impedimenta", 'f', 1.70, 38, 0.65);
+        Character blacksmith = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.BLACKSMITH, "Fulliautomatix", 'm', 2.00, 35, 0.95);
+        Character druid = CharacterFactory.createCharacter(
             CharacterFactory.CharacterType.DRUID, "Getafix", 'm', 1.70, 60, 0.7);
         
-        gaulVillage.addCharacter(asterix);
-        gaulVillage.addCharacter(obelix);
-        gaulVillage.addCharacter(getafix);
+        gaulVillage.addCharacter(merchant);
+        gaulVillage.addCharacter(innkeeper);
+        gaulVillage.addCharacter(blacksmith);
+        gaulVillage.addCharacter(druid);
         
-        // Add characters to Roman Camp
-        Character marcus = CharacterFactory.createCharacter(
+        // Add characters to Roman Camp: 1 Legionary, 1 General
+        Character legionary = CharacterFactory.createCharacter(
             CharacterFactory.CharacterType.LEGIONARY, "Marcus", 'm', 1.80, 30, 0.8);
-        Character julius = CharacterFactory.createCharacter(
+        Character general = CharacterFactory.createCharacter(
             CharacterFactory.CharacterType.GENERAL, "Julius", 'm', 1.85, 45, 0.85);
         
-        romanCamp.addCharacter(marcus);
-        romanCamp.addCharacter(julius);
+        romanCamp.addCharacter(legionary);
+        romanCamp.addCharacter(general);
+        
+        // Add characters to Roman City: 1 Legionary, 1 Prefect, 1 General
+        Character legionary2 = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.LEGIONARY, "Cassius", 'm', 1.78, 28, 0.82);
+        Character prefect = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.PREFECT, "Pontius", 'm', 1.75, 50, 0.7);
+        Character general2 = CharacterFactory.createCharacter(
+            CharacterFactory.CharacterType.GENERAL, "Caesar", 'm', 1.88, 52, 0.9);
+        
+        romanCity.addCharacter(legionary2);
+        romanCity.addCharacter(prefect);
+        romanCity.addCharacter(general2);
+        
+        // Add lycanthropes to Enclosure: Pack with hierarchy (1 alpha, 1 beta, 2 gamma, 1 omega)
+        models.people.Werewolf alpha = new models.people.Werewolf("Fenrir", 'm', 2.1, 35, 0.95, models.people.Werewolf.Rank.ALPHA);
+        models.people.Werewolf beta = new models.people.Werewolf("Grayback", 'm', 1.95, 30, 0.85, models.people.Werewolf.Rank.BETA);
+        models.people.Werewolf gamma1 = new models.people.Werewolf("Shadowfang", 'm', 1.88, 25, 0.75, models.people.Werewolf.Rank.GAMMA);
+        models.people.Werewolf gamma2 = new models.people.Werewolf("Nightclaw", 'f', 1.82, 23, 0.72, models.people.Werewolf.Rank.GAMMA);
+        models.people.Werewolf omega = new models.people.Werewolf("Runt", 'm', 1.65, 20, 0.5, models.people.Werewolf.Rank.OMEGA);
+        
+        enclosure.addCharacter(alpha);
+        enclosure.addCharacter(beta);
+        enclosure.addCharacter(gamma1);
+        enclosure.addCharacter(gamma2);
+        enclosure.addCharacter(omega);
+        
+        // Note: Battlefield starts empty as per requirements
         
         // Add some food to locations
         Food[] basicFoods = {Food.WILDBOAR, Food.WINE, Food.MISTLETOE, Food.CARROT, Food.SALT};
         for (Food food : basicFoods) {
             gaulVillage.addFood(food);
             romanCamp.addFood(food);
+            romanCity.addFood(food);
         }
         
         // Create clan leader

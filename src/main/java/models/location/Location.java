@@ -30,6 +30,8 @@ public class Location {
     private final List<Character> characters = new ArrayList<>();
     private final List<Food> foods = new ArrayList<>();
     private MagicPotion magicPotion = new MagicPotion();
+    private int healingHerbs = 0;
+    private int turnsSinceLastHerbSpawn = 0;
 
     public Location(String name, double superficie, LocationType type) {
         this.name = Objects.requireNonNull(name);
@@ -78,6 +80,26 @@ public class Location {
     public MagicPotion getMagicPotion() {
         return magicPotion;
     }
+    
+    public int getHealingHerbs() {
+        return healingHerbs;
+    }
+    
+    public void addHealingHerbs(int amount) {
+        this.healingHerbs += amount;
+    }
+    
+    public void spawnHerbsIfNeeded() {
+        turnsSinceLastHerbSpawn++;
+        if (turnsSinceLastHerbSpawn >= 3) {
+            // Healing herbs spawn every 3 turns in villages
+            if (type == LocationType.GAUL_TOWN || type == LocationType.ROMAIN_TOWN || 
+                type == LocationType.GAUL_ROMAIN_VILLAGE) {
+                healingHerbs += 2;
+                turnsSinceLastHerbSpawn = 0;
+            }
+        }
+    }
 
     public boolean addCharacter(Character p) {
         if (p == null) return false;
@@ -102,7 +124,32 @@ public class Location {
 
     public void healCharacters(double amount) {
         for (Character p : characters) {
-            p.heal(amount);
+            if (!p.isDead()) {
+                p.heal(amount);
+            }
+        }
+    }
+    
+    /**
+     * Heal a specific character using healing herbs or food.
+     * @param c The character to heal
+     * @throws IllegalStateException if character is dead or no healing resources available
+     */
+    public void healCharacter(Character c) {
+        if (c.isDead()) {
+            throw new IllegalStateException("Cannot heal dead character!");
+        }
+        
+        // Try to use healing herbs first
+        if (healingHerbs > 0) {
+            healingHerbs--;
+            c.heal(50); // Herbs heal 50 HP
+        } else if (!foods.isEmpty()) {
+            // Use food as alternative
+            Food food = foods.remove(0);
+            c.heal(30); // Food heals 30 HP
+        } else {
+            throw new IllegalStateException("No healing resources available!");
         }
     }
 
