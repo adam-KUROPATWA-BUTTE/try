@@ -16,7 +16,7 @@ public final class LocationRestriction {
  * 
  */
 
-    public static boolean isAllowed(LocationType type, Character<?, ?> character) {
+    public static boolean isAllowed(LocationType type, Character character) {
         if (character == null) return false;
         if (type == LocationType.BATTLEFIELD) return true; // everyone is allowed
 
@@ -24,6 +24,7 @@ public final class LocationRestriction {
         // if you explicitly import) — here we do generic detection via reflection.
         boolean isRoman = implementsInterfaceNamed(character, "Roman");
         boolean isGaulois = implementsInterfaceNamed(character, "Gaulois") ||
+                implementsInterfaceNamed(character, "Gaul") ||
                 character.getClass().getSimpleName().toLowerCase().contains("gaul") ||
                 character.getClass().getSimpleName().toLowerCase().contains("gaulois");
         boolean isFantastique = implementsInterfaceNamed(character, "Lycanthrope") ||

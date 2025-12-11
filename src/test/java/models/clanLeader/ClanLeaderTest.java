@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClanLeaderTest {
 
-    ClanLeader clanLeader = new ClanLeader("Timothée", 'd', 21, new Location("bleu", 12.5, LocationType.GAUL_TOWN, new MagicPotion()));
+    ClanLeader clanLeader = new ClanLeader("Timothée", 'd', 21, new Location("bleu", 12.5, LocationType.GAUL_TOWN));
 
     @Test
     void scanLocation() {

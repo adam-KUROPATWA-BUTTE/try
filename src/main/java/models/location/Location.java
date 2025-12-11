@@ -7,6 +7,7 @@ package models.location;
  */
 import models.food.Food;
 import models.people.Character;
+import models.potion.MagicPotion;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,9 +26,10 @@ public class Location {
     private final double superficie;
     private final LocationType type;
 
-    private Character<Food, ?> clanLeader;
-    private final List<Character<Food, ?>> characters = new ArrayList<>();
+    private Character clanLeader;
+    private final List<Character> characters = new ArrayList<>();
     private final List<Food> foods = new ArrayList<>();
+    private MagicPotion magicPotion = new MagicPotion();
 
     public Location(String name, double superficie, LocationType type) {
         this.name = Objects.requireNonNull(name);
@@ -53,15 +55,15 @@ public class Location {
         return type; 
     }
 
-    public Character<Food, ?> getChefDeClan() { 
+    public Character getChefDeClan() { 
         return clanLeader; 
     }
 
-    public void setChefDeClan(Character<Food, ?> clanLeader) { 
+    public void setChefDeClan(Character clanLeader) { 
         this.clanLeader = clanLeader; 
     }
 
-    public List<Character<Food, ?>> getCharacters() { 
+    public List<Character> getCharacters() { 
         return new ArrayList<>(characters); 
     }
 
@@ -73,13 +75,17 @@ public class Location {
         return characters.size(); 
     }
 
-    public boolean addCharacter(Character<Food, ?> p) {
+    public MagicPotion getMagicPotion() {
+        return magicPotion;
+    }
+
+    public boolean addCharacter(Character p) {
         if (p == null) return false;
         if (!LocationRestriction.isAllowed(type, p)) return false;
         return characters.add(p);
     }
 
-    public boolean removeCharacter(Character<Food, ?> p) {
+    public boolean removeCharacter(Character p) {
         if (p == null) return false;
         return characters.remove(p);
     }
@@ -95,7 +101,7 @@ public class Location {
     }
 
     public void healCharacters(double amount) {
-        for (Character<Food, ?> p : characters) {
+        for (Character p : characters) {
             p.heal(amount);
         }
     }
@@ -103,9 +109,9 @@ public class Location {
     public void feedCharacters() {
         if (characters.isEmpty() || foods.isEmpty()) return;
 
-        Iterator<Character<Food, ?>> itP = characters.iterator();
+        Iterator<Character> itP = characters.iterator();
         while (itP.hasNext()) {
-            Character<Food, ?> p = itP.next();
+            Character p = itP.next();
             if (foods.isEmpty()) { p.makeHungry(); continue; }
             Food aliment = foods.remove(0);
             p.eat(aliment);
@@ -118,10 +124,10 @@ public class Location {
         sb.append("Superficie: ").append(superficie).append("\n");
         sb.append("Chef: ").append(clanLeader == null ? "aucun" : clanLeader.getName()).append("\n");
         sb.append("Personnages (").append(characters.size()).append("):\n");
-        for (Character<Food, ?> p : characters) {
+        for (Character p : characters) {
             sb.append(" - ").append(p.getName())
                     .append(" | santé=").append(p.getHealth())
-                    .append(" | faim=").append(p.isHunger())
+                    .append(" | faim=").append(p.isHungry())
                     .append("\n");
         }
         sb.append("Aliments (").append(foods.size()).append("):\n");
