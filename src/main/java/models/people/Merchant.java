@@ -13,4 +13,13 @@ public class Merchant extends Character implements Gaul, Worker {
     public void work() {
         System.out.println(this.getName() + " makes a profit.");
     }
+    
+    /**
+     * Merchant bonus: +20% resources, -15% food consumption
+     * No combat bonus
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 0;
+    }
 }

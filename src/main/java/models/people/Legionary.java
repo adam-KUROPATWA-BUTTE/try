@@ -15,4 +15,12 @@ public class Legionary extends Character implements Roman, Combatant {
     public void combat(Character opponent) {
         System.out.println(this.getName() + " begins fighting " + opponent.getName());
     }
+    
+    /**
+     * Legionary bonus: +20% attack, formation bonus
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 20; // +20% attack
+    }
 }

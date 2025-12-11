@@ -24,4 +24,12 @@ public class Druid extends Character implements Gaul, Combatant, Dirigeant, Work
     public void cookPotion() {
         System.out.println(this.getName() + " cooks a potion.");
     }
+    
+    /**
+     * Druid bonus: Brew potions, +25% potion effects, magic attacks
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 15; // Magic attack bonus
+    }
 }

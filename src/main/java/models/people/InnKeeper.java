@@ -13,4 +13,13 @@ public class InnKeeper extends Character implements Gaul, Worker {
     public void work() {
         System.out.println(this.getName() + " maintains their inn.");
     }
+    
+    /**
+     * Innkeeper bonus: +50% healing effectiveness with food
+     * No combat bonus
+     */
+    @Override
+    protected int getCombatBonus() {
+        return 0;
+    }
 }

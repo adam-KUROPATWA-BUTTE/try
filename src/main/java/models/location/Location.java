@@ -21,6 +21,11 @@ import java.util.Objects;
  */
 
 public class Location {
+    
+    private static final int HERB_HEALING_AMOUNT = 50;
+    private static final int FOOD_HEALING_AMOUNT = 30;
+    private static final int HERB_SPAWN_AMOUNT = 2;
+    private static final int HERB_SPAWN_INTERVAL = 3;
 
     private final String name;
     private final double superficie;
@@ -30,6 +35,8 @@ public class Location {
     private final List<Character> characters = new ArrayList<>();
     private final List<Food> foods = new ArrayList<>();
     private MagicPotion magicPotion = new MagicPotion();
+    private int healingHerbs = 0;
+    private int turnsSinceLastHerbSpawn = 0;
 
     public Location(String name, double superficie, LocationType type) {
         this.name = Objects.requireNonNull(name);
@@ -78,6 +85,26 @@ public class Location {
     public MagicPotion getMagicPotion() {
         return magicPotion;
     }
+    
+    public int getHealingHerbs() {
+        return healingHerbs;
+    }
+    
+    public void addHealingHerbs(int amount) {
+        this.healingHerbs += amount;
+    }
+    
+    public void spawnHerbsIfNeeded() {
+        turnsSinceLastHerbSpawn++;
+        if (turnsSinceLastHerbSpawn >= HERB_SPAWN_INTERVAL) {
+            // Healing herbs spawn every 3 turns in villages
+            if (type == LocationType.GAUL_TOWN || type == LocationType.ROMAIN_TOWN || 
+                type == LocationType.GAUL_ROMAIN_VILLAGE) {
+                healingHerbs += HERB_SPAWN_AMOUNT;
+                turnsSinceLastHerbSpawn = 0;
+            }
+        }
+    }
 
     public boolean addCharacter(Character p) {
         if (p == null) return false;
@@ -102,7 +129,32 @@ public class Location {
 
     public void healCharacters(double amount) {
         for (Character p : characters) {
-            p.heal(amount);
+            if (!p.isDead()) {
+                p.heal(amount);
+            }
+        }
+    }
+    
+    /**
+     * Heal a specific character using healing herbs or food.
+     * @param c The character to heal
+     * @throws IllegalStateException if character is dead or no healing resources available
+     */
+    public void healCharacter(Character c) {
+        if (c.isDead()) {
+            throw new IllegalStateException("Cannot heal dead character!");
+        }
+        
+        // Try to use healing herbs first
+        if (healingHerbs > 0) {
+            healingHerbs--;
+            c.heal(HERB_HEALING_AMOUNT);
+        } else if (!foods.isEmpty()) {
+            // Use food as alternative
+            Food food = foods.remove(0);
+            c.heal(FOOD_HEALING_AMOUNT);
+        } else {
+            throw new IllegalStateException("No healing resources available!");
         }
     }
 
