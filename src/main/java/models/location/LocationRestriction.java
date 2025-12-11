@@ -6,7 +6,6 @@ public final class LocationRestriction {
 
     private LocationRestriction() {}
 
-
 /**
  * 
  * In this method, we check if a character is allowed in a specific location type based on their affiliation.
@@ -18,15 +17,12 @@ public final class LocationRestriction {
 
     public static boolean isAllowed(LocationType type, Character character) {
         if (character == null) return false;
-        if (type == LocationType.BATTLEFIELD) return true; // everyone is allowed
+        if (type == LocationType.BATTLEFIELD) return true; // tout le monde peut s'y rendre
 
-        // Detection via instanceof if interfaces/classes exist (compile-time safe
-        // if you explicitly import) — here we do generic detection via reflection.
+        // Détection via instanceof si les interfaces/classes existent (sécurisé en compilation
+        // si vous importez explicitement) — ici on fait la détection générique via reflection.
         boolean isRoman = implementsInterfaceNamed(character, "Roman");
-        boolean isGaulois = implementsInterfaceNamed(character, "Gaulois") ||
-                implementsInterfaceNamed(character, "Gaul") ||
-                character.getClass().getSimpleName().toLowerCase().contains("gaul") ||
-                character.getClass().getSimpleName().toLowerCase().contains("gaulois");
+        boolean isGaulois = implementsInterfaceNamed(character, "Gaul");
         boolean isFantastique = implementsInterfaceNamed(character, "Lycanthrope") ||
                 implementsInterfaceNamed(character, "Fantastique") ||
                 character.getClass().getSimpleName().toLowerCase().contains("lycanth") ||
@@ -38,11 +34,10 @@ public final class LocationRestriction {
             case ROMAIN_CAMP, ROMAIN_TOWN -> isRoman || isFantastique;
             case GAUL_ROMAIN_VILLAGE -> isGaulois || isRoman;
             case ENCLOSURE -> isFantastique;
-            case BATTLEFIELD -> true;
+            case BATTLEFIELD -> isGaulois || isRoman || isFantastique;
             default -> false;
         };
     }
-
 /**
  * 
  * Checks if an object implements an interface with the given simple name.

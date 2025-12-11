@@ -1,8 +1,7 @@
 package models.location;
 
 /**
- * All the location type used in the simulation.
- * @author Mada
+ * Types de lieux compatibles avec la simulation.
  */
 public enum LocationType {
     GAUL_TOWN,

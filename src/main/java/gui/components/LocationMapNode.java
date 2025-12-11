@@ -2,96 +2,109 @@ package gui.components;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx. scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
+import javafx.scene. paint.Color;
 import models.location.Location;
-import models.location.LocationType;
+import models.location. Battlefield;
 
 /**
- * Visual component representing a location on the map
+ * Visual node representing a location on the map
  */
 public class LocationMapNode extends StackPane {
-    
+
     private final Location location;
     private final Circle circle;
     private final Label nameLabel;
-    private final Label populationLabel;
-    
+    private final Label countLabel;
+    private boolean selected = false;
+
     public LocationMapNode(Location location) {
         this.location = location;
-        
-        // Create visual elements
+
+        // Create circle
         circle = new Circle(40);
-        circle.setFill(getColorForLocationType(location.getType()));
-        circle.setStroke(Color.web("#8b7355"));
-        circle.setStrokeWidth(2);
-        
-        VBox infoBox = new VBox(2);
-        infoBox.setAlignment(Pos.CENTER);
-        
+        updateCircleColor();
+
+        // Create labels
         nameLabel = new Label(location.getName());
-        nameLabel.setFont(Font.font("Serif", 12));
-        nameLabel.setTextFill(Color.web("#d4c5a9"));
-        nameLabel.setStyle("-fx-font-weight: bold;");
-        
-        populationLabel = new Label(String.valueOf(location.getCharactersNbr()));
-        populationLabel.setFont(Font.font("Serif", 14));
-        populationLabel.setTextFill(Color.WHITE);
-        populationLabel.setStyle("-fx-font-weight: bold;");
-        
-        infoBox.getChildren().addAll(nameLabel, populationLabel);
-        
-        getChildren().addAll(circle, infoBox);
-        
-        // Add hover effect
-        setOnMouseEntered(e -> {
-            circle.setStrokeWidth(3);
-            circle.setStroke(Color.web("#b89968"));
-            setScaleX(1.1);
-            setScaleY(1.1);
-        });
-        
-        setOnMouseExited(e -> {
-            circle.setStrokeWidth(2);
-            circle.setStroke(Color.web("#8b7355"));
-            setScaleX(1.0);
-            setScaleY(1.0);
-        });
-        
-        getStyleClass().add("location-node");
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 10px;");
+        nameLabel.setWrapText(true);
+        nameLabel.setMaxWidth(70);
+        nameLabel.setAlignment(Pos. CENTER);
+
+        countLabel = new Label(String.valueOf(location. getCharactersNbr()));
+        countLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px;");
+
+        // Layout
+        VBox vbox = new VBox(2);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(nameLabel, countLabel);
+
+        getChildren().addAll(circle, vbox);
+
+        // Styling
+        setStyle("-fx-cursor: hand;");
     }
-    
+
     /**
-     * Get color based on location type
+     * Update the display (character count, etc.)
      */
-    private Color getColorForLocationType(LocationType type) {
-        switch (type) {
-            case GAUL_TOWN:
-                return Color.web("#2d5016");
-            case ROMAIN_CAMP:
-            case ROMAIN_TOWN:
-                return Color.web("#8b0000");
-            case ENCLOSURE:
-                return Color.web("#4a5568");
-            case BATTLEFIELD:
-                return Color.web("#6b5a3a");
-            case GAUL_ROMAIN_VILLAGE:
-                return Color.web("#5a4a2a");
-            default:
-                return Color.web("#4a3f2a");
+    public void updateDisplay() {
+        countLabel.setText(String.valueOf(location.getCharactersNbr()));
+        updateCircleColor();
+    }
+
+    /**
+     * Set selection state
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+        updateCircleColor();
+    }
+
+    /**
+     * Update circle color based on location type and selection
+     */
+    private void updateCircleColor() {
+        Color color;
+
+        if (location instanceof Battlefield) {
+            color = Color.DARKRED;
+        } else {
+            switch (location.getType()) {
+                case GAUL_TOWN:
+                    color = Color.BLUE;
+                    break;
+                case ROMAIN_TOWN:
+                    color = Color.RED;
+                    break;
+                case GAUL_ROMAIN_VILLAGE:
+                    color = Color.PURPLE;
+                    break;
+                case ENCLOS:
+                    color = Color. BROWN;
+                    break;
+                case ROMAIN_CAMP:
+                    color = Color. DARKRED;
+                    break;
+                default:
+                    color = Color.GRAY;
+            }
+        }
+
+        if (selected) {
+            circle. setFill(color. brighter());
+            circle.setStroke(Color. YELLOW);
+            circle.setStrokeWidth(3);
+        } else {
+            circle.setFill(color);
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeWidth(1);
         }
     }
-    
-    /**
-     * Update the display (call this to refresh)
-     */
-    public void update() {
-        populationLabel.setText(String.valueOf(location.getCharactersNbr()));
-    }
-    
+
     public Location getLocation() {
         return location;
     }

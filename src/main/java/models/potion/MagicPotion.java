@@ -1,10 +1,9 @@
 package models.potion;
 
-import models.food.Food;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
+import models.food.Food;
 
 public class MagicPotion {
     private static final Food alternativeIngredient = Food.BEETJUICE;

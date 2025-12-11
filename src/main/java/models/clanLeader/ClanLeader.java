@@ -254,6 +254,10 @@ public class ClanLeader {
         return getTheater().transferCharacterToBattlefield(character, getLocation(), battlefield);
     }
 
+    /**
+     * Override the toString function to return the clan leader data
+     * @return clan leader : name, gender, age and location
+     */
     @Override
     public String toString() {
         String loc = getLocation() == null ? "aucun" : getLocation().getName();
@@ -263,6 +267,13 @@ public class ClanLeader {
             "Lieu assigner: " + loc + "\n";
     }
 
+    /**
+     * Execute function with the input use as command
+     * @param input is the main part of the command
+     * @param charId allow to choose a character from the character list of the current location
+     * @param locId allow to choose a location from the theater
+     * @return a string to display in the interface to give a feed-back to the player
+     */
     public String garmin(String input, String charId, String locId) {
         //String name = System.console().readLine();
         String output = "Type \"help\" for a list of commands.";

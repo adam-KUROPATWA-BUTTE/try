@@ -1,6 +1,6 @@
 package models.theater;
 
-import models.location.Battlefield;
+import models.location. Battlefield;
 import models.location.Location;
 import models.people.Character;
 
@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 /**
  * Theater class that manages all locations in the simulation.
- * @author Mada
  */
 public class Theater {
     private final List<Location> locations;
@@ -72,22 +71,22 @@ public class Theater {
         if (character == null || origin == null || battlefield == null) {
             return false;
         }
-        
+
         // Remove from origin
         if (!origin.removeCharacter(character)) {
             return false;
         }
-        
+
         // Add to battlefield with origin tracking
         if (!battlefield.addCharacterFromOrigin(character, origin)) {
             // If adding to battlefield fails, put character back to origin
             origin.addCharacter(character);
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Get all battlefields in the theater
      * @return list of battlefields
@@ -96,7 +95,27 @@ public class Theater {
         return locations.stream()
                 .filter(loc -> loc instanceof Battlefield)
                 .map(loc -> (Battlefield) loc)
-                .collect(Collectors.toList());
+                .collect(Collectors. toList());
+    }
+
+    /**
+     * NOUVEAU : Effectuer une étape de simulation
+     */
+    public void simulationStep() {
+        // Faire apparaître des herbes médicinales
+        for (Location location : locations) {
+            location.spawnHerbsIfNeeded();
+        }
+
+        // Faire vieillir certains personnages aléatoirement
+        for (Location location : locations) {
+            for (Character character : location.getCharacters()) {
+                // Diminuer légèrement la santé si affamé
+                if (character.isHungry()) {
+                    character.takeDamage(2.0);
+                }
+            }
+        }
     }
 
     @Override
