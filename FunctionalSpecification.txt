@@ -1,0 +1,29 @@
+# Étude de conception
+
+# Personnages
+Pour les personnages, on a commencé à faire la classe-mère des personages, avec les attributs et
+méthodes données dans le sujet, pour avoir une base sur laquelle faire les personnages spécifiques.
+Ensuite, on a vu qu'il y avait des groupes de personnages
+(Romain, Gaulois, Dirigeant, Travailleur, Combattant), donc on a fait des Interfaces pour chaque groupe.
+Ensuite, juste pour tester, on a placé des affichages pour les fonctions, toutes spécifique à la classe en question.
+
+# Nourritures et ingrédients
+Pour les différents aliments, nous avons créé une liste principale (avec enum) contenant l'entièreté des différents items considérée comme aliments.
+Des listes "secondaires" ont aussi été créées pour classer les ingrédients dans des sous classes, comme "meat", "vegetables", et "drinks".
+La class Food (qui gère tout ça) est donc assez similaire à une librairie
+
+# Potion Magique
+Nous avons commencé par créer la liste des ingrédients nécessaires pour la recette de la potion magique,
+puis l'ajout des différents effects supplémentaire que la potion peut donner, comme un effet de satiété ou un effet de dédoublement.
+La gestion des portions de potion fut rajouté juste après, permettant de préparer de la potion seulement lorsque la marmite est vide,
+marmite qui peut contenir 10 portions de potion. Il est aussi stocké la quantité de portion nécessaire pour obtenir de manière permanente les effets de la potion,
+ainsi que la quantité qui tourne le consommateur en statue.
+
+# Lieux
+ADAM REMPLI
+
+# Chef de Clan
+Afin de permettre au joueur d'interagir avec les différentes fonctionnalités du jeu, on a créé la classe clanLeader qui sert à contrôler un lieu et les personnages qui si trouve.
+Pour cela, dans un premier temps, les chefs de clan sont créé avec un nom / sexe / age et un lieu assignés. Via cette association à un lieu, il pourra contrôler diverse fonction,
+comme pour heal tous les personnages de la zone, les nourrirent avec un aliment qu'ils peuvent manger, les envoyer vers un autre lieu, leur faire boire de la potion magique,
+fabriquer de la potion et créer un nouveau personnage.
