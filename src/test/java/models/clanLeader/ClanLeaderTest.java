@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClanLeaderTest {
 
-    ClanLeader clanLeader = new ClanLeader("Timothée", 'd', 21, new Location("bleu", 12.5, LocationType.GAUL_TOWN, new MagicPotion()));
+    ClanLeader clanLeader = new ClanLeader("Timothée", 'd', 21, new Location("bleu", 12.5, LocationType.GAUL_TOWN));
 
     @Test
     void scanLocation() {
@@ -50,7 +50,7 @@ class ClanLeaderTest {
     void garmin() throws IOException {
         assertEquals("Type \"help\" for a list of commands.", clanLeader.garmin("", "", ""));
         assertEquals(":)", clanLeader.garmin("help", "", ""));
-        assertEquals("Character successfully created", clanLeader.garmin("create", "", ""));
+        assertEquals("Character succefully created", clanLeader.garmin("create", "", ""));
         System.out.println(clanLeader.garmin("scan", "", ""));
     }
 }

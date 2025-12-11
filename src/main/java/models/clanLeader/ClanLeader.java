@@ -209,7 +209,7 @@ public class ClanLeader {
         }
         if (!haveDruid) return false;
 
-        ArrayList<Food> ingredient = getLocation().getMagicPotion().sortFoods(getLocation().getFoods());
+        ArrayList<Food> ingredient = getLocation().getMagicPotion().sortFoods(new ArrayList<>(getLocation().getFoods()));
         for (Food food : ingredient) {
             if (getLocation().getMagicPotion().addToCurrentRecipes(food)) {
                 getLocation().removeFood(food);

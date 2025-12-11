@@ -16,7 +16,7 @@ public final class LocationRestriction {
  * 
  */
 
-    public static boolean isAllowed(LocationType type, Character<?, ?> character) {
+    public static boolean isAllowed(LocationType type, Character character) {
         if (character == null) return false;
         if (type == LocationType.BATTLEFIELD) return true; // everyone is allowed
 

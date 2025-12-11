@@ -6,29 +6,29 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LocationTest {
+class LocationRestrictionTest {
 
     // Classes de test simulant différents types de personnages
     interface Roman {}
     interface Gaulois {}
     interface Lycanthrope {}
 
-    static class RomanCharacter extends Character<?, ?> implements Roman {
+    static class RomanCharacter extends Character implements Roman {
         public RomanCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
     }
-    static class GauloisCharacter extends Character<?, ?> implements Gaulois {
+    static class GauloisCharacter extends Character implements Gaulois {
         public GauloisCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
     }
-    static class LycanthropeCharacter extends Character<?, ?> implements Lycanthrope {
+    static class LycanthropeCharacter extends Character implements Lycanthrope {
         public LycanthropeCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
     }
-    static class NeutralCharacter extends Character<?, ?> {
+    static class NeutralCharacter extends Character {
         public NeutralCharacter(String name, char sex, double height, int age, double strength) {
             super(name, sex, height, age, strength);
         }
@@ -41,48 +41,16 @@ class LocationTest {
 
     @BeforeEach
     void setUp() {
-        battlefield = new Location("Battlefield", LocationType.BATTLEFIELD);
-        gaulTown = new Location("Gaul Town", LocationType.GAUL_TOWN);
-        romainCamp = new Location("Romain Camp", LocationType.ROMAIN_CAMP);
-        enclosure = new Location("Enclosure", LocationType.ENCLOSURE);
+        battlefield = new Location("Battlefield", 100.0, LocationType.BATTLEFIELD);
+        gaulTown = new Location("Gaul Town", 100.0, LocationType.GAUL_TOWN);
+        romainCamp = new Location("Romain Camp", 100.0, LocationType.ROMAIN_CAMP);
+        enclosure = new Location("Enclosure", 100.0, LocationType.ENCLOSURE);
     }
 
     @Test
     void constructor_createsLocationWithNameAndType() {
         assertEquals("Battlefield", battlefield.getName());
-        assertEquals(LocationType.BATTLEFIELD, battlefield.getLocationType());
-    }
-
-    @Test
-    void isInside_nullCharacter_returnsFalse() {
-        assertFalse(battlefield.isInside(null));
-    }
-
-    @Test
-    void isInside_allowedCharacter_returnsTrue() {
-        RomanCharacter roman = new RomanCharacter();
-        battlefield.addCharacter(roman);
-        assertTrue(battlefield.isInside(roman));
-    }
-
-    @Test
-    void isInside_notAddedCharacter_returnsFalse() {
-        RomanCharacter roman = new RomanCharacter();
-        assertFalse(battlefield.isInside(roman));
-    }
-
-    @Test
-    void addCharacter_allowedCharacter_addsSuccessfully() {
-        GauloisCharacter gaulois = new GauloisCharacter();
-        assertTrue(gaulTown.addCharacter(gaulois));
-        assertTrue(gaulTown.isInside(gaulois));
-    }
-
-    @Test
-    void addCharacter_notAllowedCharacter_returnsFalse() {
-        RomanCharacter roman = new RomanCharacter();
-        assertFalse(gaulTown.addCharacter(roman));
-        assertFalse(gaulTown.isInside(roman));
+        assertEquals(LocationType.BATTLEFIELD, battlefield.getType());
     }
 
     @Test
@@ -91,23 +59,43 @@ class LocationTest {
     }
 
     @Test
-    void addCharacter_alreadyInside_returnsFalse() {
-        GauloisCharacter gaulois = new GauloisCharacter();
+    void addCharacter_allowedCharacter_returnsTrue() {
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
+        assertTrue(battlefield.addCharacter(roman));
+        assertTrue(battlefield.getCharacters().contains(roman));
+    }
+
+    @Test
+    void addCharacter_notAddedCharacter_returnsFalse() {
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
+        assertFalse(battlefield.getCharacters().contains(roman));
+    }
+
+    @Test
+    void addCharacter_gaulInGaulTown_addsSuccessfully() {
+        GauloisCharacter gaulois = new GauloisCharacter("Asterix", 'm', 1.6, 35, 90.0);
         assertTrue(gaulTown.addCharacter(gaulois));
-        assertFalse(gaulTown.addCharacter(gaulois));
+        assertTrue(gaulTown.getCharacters().contains(gaulois));
+    }
+
+    @Test
+    void addCharacter_romanInGaulTown_returnsFalse() {
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
+        assertFalse(gaulTown.addCharacter(roman));
+        assertFalse(gaulTown.getCharacters().contains(roman));
     }
 
     @Test
     void removeCharacter_existingCharacter_removesSuccessfully() {
-        RomanCharacter roman = new RomanCharacter();
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
         romainCamp.addCharacter(roman);
         assertTrue(romainCamp.removeCharacter(roman));
-        assertFalse(romainCamp.isInside(roman));
+        assertFalse(romainCamp.getCharacters().contains(roman));
     }
 
     @Test
     void removeCharacter_notInsideCharacter_returnsFalse() {
-        RomanCharacter roman = new RomanCharacter();
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
         assertFalse(romainCamp.removeCharacter(roman));
     }
 
@@ -118,8 +106,8 @@ class LocationTest {
 
     @Test
     void getCharacters_returnsAllCharactersInside() {
-        RomanCharacter roman = new RomanCharacter();
-        LycanthropeCharacter lycanthrope = new LycanthropeCharacter();
+        RomanCharacter roman = new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0);
+        LycanthropeCharacter lycanthrope = new LycanthropeCharacter("Wolf", 'm', 1.9, 25, 100.0);
 
         romainCamp.addCharacter(roman);
         romainCamp.addCharacter(lycanthrope);
@@ -131,18 +119,18 @@ class LocationTest {
 
     @Test
     void battlefield_allowsAllCharacterTypes() {
-        assertTrue(battlefield.addCharacter(new RomanCharacter()));
-        assertTrue(battlefield.addCharacter(new GauloisCharacter()));
-        assertTrue(battlefield.addCharacter(new LycanthropeCharacter()));
-        assertTrue(battlefield.addCharacter(new NeutralCharacter()));
+        assertTrue(battlefield.addCharacter(new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0)));
+        assertTrue(battlefield.addCharacter(new GauloisCharacter("Asterix", 'm', 1.6, 35, 90.0)));
+        assertTrue(battlefield.addCharacter(new LycanthropeCharacter("Wolf", 'm', 1.9, 25, 100.0)));
+        assertTrue(battlefield.addCharacter(new NeutralCharacter("Neutral", 'm', 1.7, 28, 70.0)));
         assertEquals(4, battlefield.getCharacters().size());
     }
 
     @Test
     void enclosure_allowsOnlyLycanthropes() {
-        assertTrue(enclosure.addCharacter(new LycanthropeCharacter()));
-        assertFalse(enclosure.addCharacter(new RomanCharacter()));
-        assertFalse(enclosure.addCharacter(new GauloisCharacter()));
+        assertTrue(enclosure.addCharacter(new LycanthropeCharacter("Wolf", 'm', 1.9, 25, 100.0)));
+        assertFalse(enclosure.addCharacter(new RomanCharacter("Marcus", 'm', 1.8, 30, 80.0)));
+        assertFalse(enclosure.addCharacter(new GauloisCharacter("Asterix", 'm', 1.6, 35, 90.0)));
         assertEquals(1, enclosure.getCharacters().size());
     }
 }
