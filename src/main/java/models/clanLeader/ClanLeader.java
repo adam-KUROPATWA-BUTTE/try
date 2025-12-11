@@ -286,6 +286,23 @@ public class ClanLeader {
                 Location newLocation = getTheater().getLocations().get(Integer. parseInt(locId));
                 moveCharacter(newLocation, character);
                 return "The selected Character have move to selected location";
+            case "battlefield":
+                // Transfer character to battlefield
+                if (getLocation() == null || getTheater() == null) {
+                    return "Error: No location or theater assigned";
+                }
+                Character charToTransfer = getLocation().getCharacters().get(Integer.parseInt(charId));
+                List<Battlefield> battlefields = getTheater().getBattlefields();
+                if (battlefields.isEmpty()) {
+                    return "No battlefields available";
+                }
+                Battlefield battlefield = battlefields.get(Integer.parseInt(locId));
+                boolean success = transferCharacterToBattlefield(charToTransfer, battlefield);
+                if (success) {
+                    return "Transferred " + charToTransfer.getName() + " to " + battlefield.getName();
+                } else {
+                    return "Failed to transfer character";
+                }
             case "create":
                 createCharacter(randomCharacterData());
                 return "Character successfully created";

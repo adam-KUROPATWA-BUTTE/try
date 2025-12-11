@@ -9,10 +9,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
 import models.clanLeader.ClanLeader;
 import models.food.Food;
+import models.location.Battlefield;
 import models.location.Location;
 import models.people.Character;
 import models.theater.Theater;
@@ -47,6 +53,7 @@ public class GameViewController implements Initializable {
     @FXML private ListView<String> foodList;
     @FXML private Label clanChiefNameLabel;
     @FXML private Label clanChiefLocationLabel;
+    @FXML private VBox battlefieldControlsBox;
     
     private GameState gameState;
     private Location selectedLocation;
@@ -54,6 +61,7 @@ public class GameViewController implements Initializable {
     private boolean isRunning = false;
     
     private Map<Location, LocationMapNode> locationNodeMap = new HashMap<>();
+    private Map<String, Character> characterIdMap = new HashMap<>();
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,6 +76,9 @@ public class GameViewController implements Initializable {
         updateDisplay();
         createMapVisualization();
         updateClanChiefInfo();
+        
+        // Setup drag and drop for character transfer
+        setupCharacterDragAndDrop();
     }
     
     /**
@@ -104,9 +115,103 @@ public class GameViewController implements Initializable {
                 selectLocation(location);
             });
             
+            // Setup drop target for battlefields
+            if (location instanceof Battlefield) {
+                setupBattlefieldDropTarget(locationNode, (Battlefield) location);
+            }
+            
             mapPane.getChildren().add(locationNode);
             locationNodeMap.put(location, locationNode);
         }
+    }
+    
+    /**
+     * Setup drag and drop for character transfers
+     */
+    private void setupCharacterDragAndDrop() {
+        characterList.setOnDragDetected(event -> {
+            int selectedIndex = characterList.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0 && selectedLocation != null) {
+                String selectedItem = characterList.getItems().get(selectedIndex);
+                // Extract character ID from the list item
+                Character character = getCharacterFromListItem(selectedItem);
+                
+                if (character != null) {
+                    Dragboard db = characterList.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString(character.getName());
+                    db.setContent(content);
+                    event.consume();
+                }
+            }
+        });
+    }
+    
+    /**
+     * Setup a battlefield location node as a drop target
+     */
+    private void setupBattlefieldDropTarget(LocationMapNode battlefieldNode, Battlefield battlefield) {
+        battlefieldNode.setOnDragOver(event -> {
+            if (event.getDragboard().hasString() && selectedLocation != null) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+        
+        battlefieldNode.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            
+            if (db.hasString()) {
+                String characterName = db.getString();
+                Character character = getCharacterFromLocation(selectedLocation, characterName);
+                
+                if (character != null) {
+                    // Transfer character to battlefield
+                    boolean transferred = gameState.getTheater().transferCharacterToBattlefield(
+                        character, selectedLocation, battlefield);
+                    
+                    if (transferred) {
+                        gameState.addEvent("Transferred " + characterName + " to " + battlefield.getName());
+                        updateDisplay();
+                        updateMapVisualization();
+                        success = true;
+                    }
+                }
+            }
+            
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
+    
+    /**
+     * Get a character from the location by name
+     */
+    private Character getCharacterFromLocation(Location location, String name) {
+        if (location == null) return null;
+        
+        for (Character c : location.getCharacters()) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Extract character from a list item string
+     */
+    private Character getCharacterFromListItem(String listItem) {
+        if (selectedLocation == null || listItem == null) return null;
+        
+        // List item format: "Name (Health: X, Hungry: Y)"
+        String[] parts = listItem.split(" \\(");
+        if (parts.length > 0) {
+            String name = parts[0];
+            return getCharacterFromLocation(selectedLocation, name);
+        }
+        return null;
     }
     
     /**
@@ -137,6 +242,7 @@ public class GameViewController implements Initializable {
             locationAreaLabel.setText("");
             characterList.setItems(FXCollections.observableArrayList());
             foodList.setItems(FXCollections.observableArrayList());
+            hideBattlefieldControls();
             return;
         }
         
@@ -159,6 +265,83 @@ public class GameViewController implements Initializable {
             foods.add(f.toString());
         }
         foodList.setItems(foods);
+        
+        // Show battlefield controls if this is a battlefield
+        if (selectedLocation instanceof Battlefield) {
+            showBattlefieldControls((Battlefield) selectedLocation);
+        } else {
+            hideBattlefieldControls();
+        }
+    }
+    
+    /**
+     * Show battlefield-specific controls
+     */
+    private void showBattlefieldControls(Battlefield battlefield) {
+        if (battlefieldControlsBox == null) {
+            // Create controls dynamically if not in FXML
+            battlefieldControlsBox = new VBox(10);
+            battlefieldControlsBox.setPadding(new Insets(10));
+            locationDetailsPanel.getChildren().add(battlefieldControlsBox);
+        }
+        
+        battlefieldControlsBox.getChildren().clear();
+        battlefieldControlsBox.setVisible(true);
+        battlefieldControlsBox.setManaged(true);
+        
+        // Status label
+        Label statusLabel = new Label("Status: " + battlefield.getBattleStatus());
+        statusLabel.setStyle("-fx-font-weight: bold;");
+        
+        // Start Battle button
+        Button startBattleBtn = new Button("Start Battle");
+        startBattleBtn.setDisable(!battlefield.canStartBattle());
+        startBattleBtn.setOnAction(e -> {
+            battlefield.startBattle();
+            gameState.addEvent("Battle started at " + battlefield.getName());
+            gameState.addEvent("Battle ended with " + battlefield.getCharactersNbr() + " survivors");
+            updateLocationDetails();
+            updateMapVisualization();
+        });
+        
+        // Return All to Origins button
+        Button returnAllBtn = new Button("Return All to Origins");
+        returnAllBtn.setDisable(battlefield.getCharactersNbr() == 0);
+        returnAllBtn.setOnAction(e -> {
+            int count = battlefield.getCharactersNbr();
+            battlefield.returnSurvivorsToOrigins();
+            gameState.addEvent("Returned " + count + " characters to their origins from " + battlefield.getName());
+            updateLocationDetails();
+            updateMapVisualization();
+        });
+        
+        // Info label
+        Label infoLabel = new Label();
+        if (battlefield.canStartBattle()) {
+            infoLabel.setText("✓ Ready for battle!");
+            infoLabel.setStyle("-fx-text-fill: green;");
+        } else if (battlefield.getCharactersNbr() == 0) {
+            infoLabel.setText("Drag characters here to stage a battle");
+            infoLabel.setStyle("-fx-text-fill: gray;");
+        } else if (!battlefield.hasOpposingFactions()) {
+            infoLabel.setText("⚠ Need opposing factions (Gauls vs Romans)");
+            infoLabel.setStyle("-fx-text-fill: orange;");
+        } else {
+            infoLabel.setText("⚠ Need at least 2 characters");
+            infoLabel.setStyle("-fx-text-fill: orange;");
+        }
+        
+        battlefieldControlsBox.getChildren().addAll(statusLabel, infoLabel, startBattleBtn, returnAllBtn);
+    }
+    
+    /**
+     * Hide battlefield controls
+     */
+    private void hideBattlefieldControls() {
+        if (battlefieldControlsBox != null) {
+            battlefieldControlsBox.setVisible(false);
+            battlefieldControlsBox.setManaged(false);
+        }
     }
     
     /**
