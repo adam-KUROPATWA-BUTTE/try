@@ -280,6 +280,10 @@ public class GameViewController implements Initializable {
     private void showBattlefieldControls(Battlefield battlefield) {
         if (battlefieldControlsBox == null) {
             // Create controls dynamically if not in FXML
+            if (locationDetailsPanel == null) {
+                // Safety check - cannot create controls without parent panel
+                return;
+            }
             battlefieldControlsBox = new VBox(10);
             battlefieldControlsBox.setPadding(new Insets(10));
             locationDetailsPanel.getChildren().add(battlefieldControlsBox);

@@ -149,7 +149,8 @@ public class Battlefield extends Location {
      * Return all surviving characters to their original locations
      */
     public void returnSurvivorsToOrigins() {
-        var charactersToReturn = getCharacters();
+        // Create a copy to avoid ConcurrentModificationException
+        var charactersToReturn = new java.util.ArrayList<>(getCharacters());
         
         for (Character character : charactersToReturn) {
             Location origin = originLocations.get(character);
@@ -168,7 +169,8 @@ public class Battlefield extends Location {
      * Remove dead characters from the battlefield and origin tracking
      */
     public void removeDeadCharacters() {
-        var characters = getCharacters();
+        // Create a copy to avoid ConcurrentModificationException
+        var characters = new java.util.ArrayList<>(getCharacters());
         
         for (Character character : characters) {
             if (character.isDead()) {

@@ -291,17 +291,37 @@ public class ClanLeader {
                 if (getLocation() == null || getTheater() == null) {
                     return "Error: No location or theater assigned";
                 }
-                Character charToTransfer = getLocation().getCharacters().get(Integer.parseInt(charId));
-                List<Battlefield> battlefields = getTheater().getBattlefields();
-                if (battlefields.isEmpty()) {
-                    return "No battlefields available";
-                }
-                Battlefield battlefield = battlefields.get(Integer.parseInt(locId));
-                boolean success = transferCharacterToBattlefield(charToTransfer, battlefield);
-                if (success) {
-                    return "Transferred " + charToTransfer.getName() + " to " + battlefield.getName();
-                } else {
-                    return "Failed to transfer character";
+                
+                try {
+                    int charIndex = Integer.parseInt(charId);
+                    int locIndex = Integer.parseInt(locId);
+                    
+                    List<Character> chars = getLocation().getCharacters();
+                    if (charIndex < 0 || charIndex >= chars.size()) {
+                        return "Error: Invalid character index. Available: 0-" + (chars.size() - 1);
+                    }
+                    
+                    Character charToTransfer = chars.get(charIndex);
+                    List<Battlefield> battlefields = getTheater().getBattlefields();
+                    
+                    if (battlefields.isEmpty()) {
+                        return "No battlefields available";
+                    }
+                    
+                    if (locIndex < 0 || locIndex >= battlefields.size()) {
+                        return "Error: Invalid battlefield index. Available: 0-" + (battlefields.size() - 1);
+                    }
+                    
+                    Battlefield battlefield = battlefields.get(locIndex);
+                    boolean success = transferCharacterToBattlefield(charToTransfer, battlefield);
+                    
+                    if (success) {
+                        return "Transferred " + charToTransfer.getName() + " to " + battlefield.getName();
+                    } else {
+                        return "Failed to transfer character";
+                    }
+                } catch (NumberFormatException e) {
+                    return "Error: Invalid number format. Use integers for character and battlefield IDs";
                 }
             case "create":
                 createCharacter(randomCharacterData());
