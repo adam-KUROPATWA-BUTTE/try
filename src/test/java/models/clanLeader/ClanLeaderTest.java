@@ -50,7 +50,7 @@ class ClanLeaderTest {
     void garmin() throws IOException {
         assertEquals("Type \"help\" for a list of commands.", clanLeader.garmin("", "", ""));
         assertEquals(":)", clanLeader.garmin("help", "", ""));
-        assertEquals("Character succefully created", clanLeader.garmin("create", "", ""));
+        assertEquals("Character successfully created", clanLeader.garmin("create", "", ""));
         System.out.println(clanLeader.garmin("scan", "", ""));
     }
 }

@@ -271,7 +271,7 @@ public class ClanLeader {
                 return "The selected Character have move to selected location";
             case "create":
                 createCharacter(randomCharacterData());
-                return "Character succefully created";
+                return "Character successfully created";
             case "scan":
                 return scanLocation();
             case "info":
