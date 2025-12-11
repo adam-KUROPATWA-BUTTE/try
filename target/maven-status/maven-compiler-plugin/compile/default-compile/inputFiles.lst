@@ -1,4 +1,10 @@
+/home/runner/work/try/try/src/main/java/Main.java
 /home/runner/work/try/try/src/main/java/models/clanLeader/ClanLeader.java
+/home/runner/work/try/try/src/main/java/models/enums/Sex.java
+/home/runner/work/try/try/src/main/java/models/exceptions/CharacterDeadException.java
+/home/runner/work/try/try/src/main/java/models/exceptions/InvalidPotionException.java
+/home/runner/work/try/try/src/main/java/models/exceptions/LocationAccessDeniedException.java
+/home/runner/work/try/try/src/main/java/models/factory/CharacterFactory.java
 /home/runner/work/try/try/src/main/java/models/food/Food.java
 /home/runner/work/try/try/src/main/java/models/location/Location.java
 /home/runner/work/try/try/src/main/java/models/location/LocationRestriction.java
@@ -19,3 +25,4 @@
 /home/runner/work/try/try/src/main/java/models/people/Worker.java
 /home/runner/work/try/try/src/main/java/models/potion/MagicPotion.java
 /home/runner/work/try/try/src/main/java/models/theater/Theater.java
+/home/runner/work/try/try/src/main/java/models/utils/CharacterSorter.java

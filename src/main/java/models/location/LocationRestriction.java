@@ -24,6 +24,7 @@ public final class LocationRestriction {
         // if you explicitly import) — here we do generic detection via reflection.
         boolean isRoman = implementsInterfaceNamed(character, "Roman");
         boolean isGaulois = implementsInterfaceNamed(character, "Gaulois") ||
+                implementsInterfaceNamed(character, "Gaul") ||
                 character.getClass().getSimpleName().toLowerCase().contains("gaul") ||
                 character.getClass().getSimpleName().toLowerCase().contains("gaulois");
         boolean isFantastique = implementsInterfaceNamed(character, "Lycanthrope") ||
