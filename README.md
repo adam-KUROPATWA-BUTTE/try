@@ -1,6 +1,6 @@
 # Armorique Invasion Simulation
 
-A Java-based simulation combining Gallic/Roman invasion scenarios (TD3) with Lycanthrope colony management (TD4).
+A Java-based simulation combining Gallic/Roman invasion scenarios (TD3) with Lycanthrope colony management (TD4), featuring a complete JavaFX graphical user interface.
 
 ## Project Overview
 
@@ -12,11 +12,13 @@ This project simulates a theatrical environment where Gauls, Romans, and Lycanth
 - **Lycanthrope Colony**: Pack hierarchy with domination mechanics and howling communication
 - **Clan Leadership**: Interactive menu system for location management
 - **Invasion Theater**: Main simulation coordinating all activities
+- **JavaFX GUI**: Complete graphical user interface with civilization-style presentation
 
 ## Requirements
 
 - Java 17 or higher
 - Maven 3.6+
+- JavaFX 21.0.1 (included via Maven dependencies)
 
 ## Building the Project
 
@@ -37,32 +39,88 @@ mvn jacoco:report
 
 The coverage report will be available at `target/site/jacoco/index.html`.
 
+## Running the Application
+
+### JavaFX GUI (Recommended)
+
+```bash
+# Run the JavaFX application
+mvn javafx:run
+```
+
+This will launch the graphical interface with:
+- **Main Menu**: Start new game, settings, exit
+- **Setup Screen**: Configure theater, locations, characters, and game rules
+- **Game View**: Interactive map, location management, event log, statistics
+- **Real-time Simulation**: Watch the simulation unfold with visual feedback
+
+### Command Line Interface
+
+```bash
+# Run the traditional CLI version
+mvn exec:java -Dexec.mainClass="Main"
+```
+
 ## Project Structure
 
 ```
-src/main/java/models/
-├── characters/          # Character hierarchy (Gauls, Romans, Lycanthropes)
-├── food/                # Food system and ingredients
-├── potion/              # Magic potion brewing
-├── locations/           # Location types and restrictions
-├── clanLeader/          # Clan chief management
-├── theater/             # Simulation theater
-└── interfaces/          # Combatant, Leader, Worker interfaces
+src/main/java/
+├── models/              # Core simulation models
+│   ├── clanLeader/     # Clan chief management
+│   ├── enums/          # Enumerations
+│   ├── exceptions/     # Custom exceptions
+│   ├── factory/        # Character factory
+│   ├── food/           # Food system
+│   ├── location/       # Location types and restrictions
+│   ├── people/         # Character hierarchy (Gauls, Romans, Lycanthropes)
+│   ├── potion/         # Magic potion brewing
+│   ├── theater/        # Simulation theater
+│   └── utils/          # Utility classes
+├── gui/                # JavaFX GUI components
+│   ├── controllers/    # FXML controllers
+│   ├── components/     # Custom UI components
+│   ├── animations/     # Animation utilities
+│   └── utils/          # GUI utilities
+└── Main.java           # CLI entry point
+
+src/main/resources/
+├── fxml/               # FXML layout files
+├── css/                # Stylesheets
+├── images/             # Icons and images (placeholder)
+└── sounds/             # Sound effects (placeholder)
 
 src/test/java/           # JUnit tests
 ```
 
-## Running the Simulation
-
-```bash
-# Compile the project
-mvn compile
-
-# Run the main class (when implemented)
-mvn exec:java -Dexec.mainClass="Main"
-```
-
 ## Features
+
+### JavaFX GUI Features
+
+**Main Menu:**
+- Start new game with default or custom configuration
+- Settings (placeholder for future features)
+- Exit with confirmation
+
+**Setup Screen:**
+- **Theater Configuration**: Name, location count, simulation speed
+- **Location Settings**: Default area and food quantities
+- **Character Settings**: Characters per location, initial strength
+- **Game Rules**: Toggle magic potions, lycanthropes, and combat
+- Quick start with defaults or custom configuration
+
+**Game View:**
+- **Interactive Map**: Visual representation of all locations with population indicators
+- **Location Details**: View characters, food inventory, and perform actions
+- **Event Log**: Track all game events in real-time
+- **Statistics**: Monitor Gaul, Roman, and Lycanthrope populations
+- **Simulation Controls**: Play, pause, and fast-forward
+- **Clan Chief Controls**: Manage your assigned location
+
+**Character Management:**
+- Create new characters with random attributes
+- Heal all characters at a location
+- Feed all characters from available food
+- Prepare magic potions (requires druid and ingredients)
 
 ### Character Types
 
@@ -140,8 +198,12 @@ See `.github/workflows/maven.yml` for pipeline configuration.
 4. **Generics** - Type-safe collections
 5. **Collections** - ArrayList, HashMap usage with iterators
 6. **Exceptions** - Custom exception handling
-7. **Design Patterns** - Factory, Observer, Strategy, Singleton (planned)
-8. **Threads** - Concurrent simulation (planned)
+7. **Design Patterns** - Factory, Singleton, Observer
+8. **JavaFX** - Modern GUI with FXML, CSS styling, and data binding
+9. **MVC Pattern** - Model-View-Controller architecture
+10. **Event-driven Programming** - GUI event handling
+11. **Property Binding** - Observable properties for reactive UI
+12. **Animations** - Transitions and visual effects
 9. **Sorting** - Custom sorting algorithms (planned)
 10. **Enums** - LocationType, Food, Sex, etc.
 
@@ -162,19 +224,32 @@ See `.github/workflows/maven.yml` for pipeline configuration.
 - ✅ Test infrastructure
 - ✅ CI/CD pipeline
 - ✅ JaCoCo integration
+- ✅ **JavaFX GUI Implementation**
+  - ✅ Main menu with navigation
+  - ✅ Setup screen with full configuration
+  - ✅ Game view with interactive map
+  - ✅ Location management interface
+  - ✅ Event logging and statistics
+  - ✅ Real-time simulation visualization
+  - ✅ Clan chief control panel
+  - ✅ Character and location cards
+  - ✅ Custom CSS theming (civilization style)
+  - ✅ Animation utilities
 
 ### In Progress
-- 🔄 Lycanthrope pack hierarchy
-- 🔄 Howling communication system
-- 🔄 Full simulation loop with threads
-- 🔄 Battle mechanics
-- 🔄 Comprehensive documentation
+- 🔄 Lycanthrope pack hierarchy visualization
+- 🔄 Combat animation system
+- 🔄 Advanced potion brewing interface
 
 ### Planned
-- 📋 Complete user manual
-- 📋 Design document with class diagrams
-- 📋 Additional test coverage
-- 📋 Enhanced simulation features
+- 📋 Howling communication visualization
+- 📋 Battle view with animations
+- 📋 Character detail modal dialogs
+- 📋 Save/load game functionality
+- 📋 Settings screen with volume controls
+- 📋 End game statistics screen
+- 📋 Achievement system
+- 📋 Tutorial mode
 
 ## Contributing
 

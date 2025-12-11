@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="gui.controllers.GameViewController" 
+            styleClass="game-view"
+            prefWidth="1400" prefHeight="900">
+    
+    <!-- Top HUD Bar -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="hud-bar">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <Label text="Armorique Simulation" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator orientation="VERTICAL"/>
+            
+            <Label text="Turn:"/>
+            <Label fx:id="turnLabel" text="0" style="-fx-font-weight: bold;"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label text="Population:"/>
+            <Label fx:id="populationLabel" text="0" style="-fx-font-weight: bold;"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <!-- Simulation Controls -->
+            <Button fx:id="playPauseButton" text="▶ Play" onAction="#onPlayPause" styleClass="action-button"/>
+            <Button text="⏩ Fast" onAction="#onFastForward" styleClass="action-button"/>
+            <Button text="⏸ Pause" onAction="#onPause" styleClass="action-button"/>
+            
+            <Separator orientation="VERTICAL"/>
+            <Button text="Menu" onAction="#onMenu" styleClass="menu-button"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <BorderPane>
+            <!-- Left Panel - Event Log -->
+            <left>
+                <VBox styleClass="side-panel" minWidth="250" maxWidth="300">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <Label text="Event Log" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <ListView fx:id="eventLogList" VBox.vgrow="ALWAYS" styleClass="event-log"/>
+                    
+                    <Separator/>
+                    
+                    <Label text="Statistics" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <VBox spacing="5">
+                        <HBox spacing="5">
+                            <Label text="Gauls:"/>
+                            <Label fx:id="gaulCountLabel" text="0" style="-fx-text-fill: #2d5016; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="Romans:"/>
+                            <Label fx:id="romanCountLabel" text="0" style="-fx-text-fill: #8b0000; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="Lycanthropes:"/>
+                            <Label fx:id="lycanthropeCountLabel" text="0" style="-fx-text-fill: #4a5568; -fx-font-weight: bold;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </left>
+            
+            <!-- Center - Map View -->
+            <center>
+                <StackPane styleClass="map-view">
+                    <Pane fx:id="mapPane"/>
+                    
+                    <Label text="Map: Click locations to interact" 
+                           style="-fx-font-size: 14px; -fx-padding: 10;"
+                           StackPane.alignment="TOP_CENTER"/>
+                </StackPane>
+            </center>
+            
+            <!-- Right Panel - Location Details -->
+            <right>
+                <VBox styleClass="side-panel" minWidth="300" maxWidth="400">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <Label text="Location Details" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <VBox fx:id="locationDetailsPanel" spacing="10">
+                        <Label fx:id="locationNameLabel" text="Select a location" 
+                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                        <Label fx:id="locationTypeLabel" text=""/>
+                        <Label fx:id="locationAreaLabel" text=""/>
+                        
+                        <Separator/>
+                        
+                        <Label text="Characters:" style="-fx-font-weight: bold;"/>
+                        <ListView fx:id="characterList" maxHeight="200" styleClass="list-view"/>
+                        
+                        <Separator/>
+                        
+                        <Label text="Food Items:" style="-fx-font-weight: bold;"/>
+                        <ListView fx:id="foodList" maxHeight="150" styleClass="list-view"/>
+                        
+                        <Separator/>
+                        
+                        <Label text="Actions:" style="-fx-font-weight: bold;"/>
+                        <VBox spacing="5">
+                            <Button text="Create Character" onAction="#onCreateCharacter" 
+                                    styleClass="action-button" maxWidth="Infinity"/>
+                            <Button text="Heal All" onAction="#onHealAll" 
+                                    styleClass="action-button" maxWidth="Infinity"/>
+                            <Button text="Feed All" onAction="#onFeedAll" 
+                                    styleClass="action-button" maxWidth="Infinity"/>
+                            <Button text="Prepare Potion" onAction="#onPreparePotion" 
+                                    styleClass="action-button" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </right>
+        </BorderPane>
+    </center>
+    
+    <!-- Bottom - Clan Chief Panel -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="hud-bar">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <Label text="Clan Chief:"/>
+            <Label fx:id="clanChiefNameLabel" text="Unknown" style="-fx-font-weight: bold;"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label text="Location:"/>
+            <Label fx:id="clanChiefLocationLabel" text="Unknown" style="-fx-font-weight: bold;"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Button text="Examine Location" onAction="#onExamineLocation" styleClass="action-button"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

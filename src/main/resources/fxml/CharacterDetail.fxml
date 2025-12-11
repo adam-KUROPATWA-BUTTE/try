@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="gui.controllers.CharacterDetailController" 
+            styleClass="setup-panel"
+            prefWidth="500" prefHeight="600">
+    
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="hud-bar">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Character Details" styleClass="section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Close" onAction="#onClose" styleClass="menu-button"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="15" styleClass="setup-panel">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Character Name -->
+                <Label fx:id="characterNameLabel" text="Character Name" 
+                       style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                
+                <Label fx:id="characterTypeLabel" text="Type" 
+                       style="-fx-font-size: 16px; -fx-text-fill: #8b7355;"/>
+                
+                <Separator/>
+                
+                <!-- Attributes -->
+                <VBox spacing="10">
+                    <Label text="Attributes" styleClass="section-title"/>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Health:" minWidth="100"/>
+                        <ProgressBar fx:id="healthBar" prefWidth="200"/>
+                        <Label fx:id="healthLabel" text="100"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Strength:" minWidth="100"/>
+                        <ProgressBar fx:id="strengthBar" prefWidth="200"/>
+                        <Label fx:id="strengthLabel" text="0.5"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Height:" minWidth="100"/>
+                        <Label fx:id="heightLabel" text="1.70m"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Age:" minWidth="100"/>
+                        <Label fx:id="ageLabel" text="30"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Gender:" minWidth="100"/>
+                        <Label fx:id="genderLabel" text="Male"/>
+                    </HBox>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Status -->
+                <VBox spacing="10">
+                    <Label text="Status" styleClass="section-title"/>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Hungry:" minWidth="100"/>
+                        <Label fx:id="hungryLabel" text="No"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Current Location:" minWidth="100"/>
+                        <Label fx:id="locationLabel" text="Unknown"/>
+                    </HBox>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Actions -->
+                <VBox spacing="8">
+                    <Label text="Actions" styleClass="section-title"/>
+                    
+                    <Button text="Heal Character" onAction="#onHeal" 
+                            styleClass="action-button" maxWidth="Infinity"/>
+                    <Button text="Feed Character" onAction="#onFeed" 
+                            styleClass="action-button" maxWidth="Infinity"/>
+                    <Button text="View Full Details" onAction="#onViewDetails" 
+                            styleClass="action-button" maxWidth="Infinity"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+</BorderPane>
