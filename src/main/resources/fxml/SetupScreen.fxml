@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="gui.controllers.SetupController" 
+            prefWidth="1400" prefHeight="900">
+    
+    <top>
+        <VBox styleClass="hud-bar">
+            <Label text="Game Setup" styleClass="main-menu-title">
+                <font>
+                    <Font size="32" />
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20" styleClass="setup-panel">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Theater Configuration -->
+                <VBox spacing="10">
+                    <Label text="Theater Configuration" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Theater Name:" minWidth="150"/>
+                        <TextField fx:id="theaterNameField" promptText="Enter theater name" minWidth="300"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Number of Locations:" minWidth="150"/>
+                        <Spinner fx:id="locationCountSpinner" min="3" max="10" initialValue="5" 
+                                 editable="true" minWidth="100"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Simulation Speed:" minWidth="150"/>
+                        <Slider fx:id="simulationSpeedSlider" min="0.5" max="2.0" value="1.0" 
+                                showTickLabels="true" showTickMarks="true" majorTickUnit="0.5" 
+                                minorTickCount="1" minWidth="300"/>
+                        <Label fx:id="speedLabel" text="1.0x"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Location Setup -->
+                <VBox spacing="10">
+                    <Label text="Default Location Settings" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Default Area:" minWidth="150"/>
+                        <Slider fx:id="defaultAreaSlider" min="50" max="500" value="200" 
+                                showTickLabels="true" showTickMarks="true" majorTickUnit="100" 
+                                minWidth="300"/>
+                        <Label fx:id="areaLabel" text="200"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Initial Food Quantity:" minWidth="150"/>
+                        <Slider fx:id="initialFoodSlider" min="0" max="20" value="10" 
+                                showTickLabels="true" showTickMarks="true" majorTickUnit="5" 
+                                minWidth="300"/>
+                        <Label fx:id="foodLabel" text="10"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Character Setup -->
+                <VBox spacing="10">
+                    <Label text="Character Settings" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Characters Per Location:" minWidth="150"/>
+                        <Spinner fx:id="charactersPerLocationSpinner" min="1" max="20" initialValue="5" 
+                                 editable="true" minWidth="100"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Initial Strength:" minWidth="150"/>
+                        <Slider fx:id="initialStrengthSlider" min="0.1" max="1.0" value="0.5" 
+                                showTickLabels="true" showTickMarks="true" majorTickUnit="0.2" 
+                                minWidth="300"/>
+                        <Label fx:id="strengthLabel" text="0.5"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Game Rules -->
+                <VBox spacing="10">
+                    <Label text="Game Rules" styleClass="section-title"/>
+                    <Separator/>
+                    
+                    <CheckBox fx:id="enablePotionsCheckBox" text="Enable Magic Potions" selected="true"/>
+                    <CheckBox fx:id="enableLycanthropesCheckBox" text="Enable Lycanthropes" selected="true"/>
+                    <CheckBox fx:id="enableBattlesCheckBox" text="Enable Combat" selected="true"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" styleClass="hud-bar">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <Button text="Back to Menu" onAction="#onBack" styleClass="menu-button"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Quick Start (Default)" onAction="#onQuickStart" styleClass="action-button"/>
+            <Button text="Start Game" onAction="#onStartGame" styleClass="action-button"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>
