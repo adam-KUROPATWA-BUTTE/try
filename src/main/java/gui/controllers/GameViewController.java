@@ -19,6 +19,8 @@ import models.theater.Theater;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -51,6 +53,8 @@ public class GameViewController implements Initializable {
     private Timer simulationTimer;
     private boolean isRunning = false;
     
+    private Map<Location, LocationMapNode> locationNodeMap = new HashMap<>();
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameState = ArmoriqueApp.getGameState();
@@ -71,6 +75,7 @@ public class GameViewController implements Initializable {
      */
     private void createMapVisualization() {
         mapPane.getChildren().clear();
+        locationNodeMap.clear();
         
         Theater theater = gameState.getTheater();
         List<Location> locations = theater.getLocations();
@@ -100,6 +105,16 @@ public class GameViewController implements Initializable {
             });
             
             mapPane.getChildren().add(locationNode);
+            locationNodeMap.put(location, locationNode);
+        }
+    }
+    
+    /**
+     * Update existing map nodes instead of recreating
+     */
+    private void updateMapVisualization() {
+        for (Map.Entry<Location, LocationMapNode> entry : locationNodeMap.entrySet()) {
+            entry.getValue().update();
         }
     }
     
@@ -237,7 +252,7 @@ public class GameViewController implements Initializable {
                     
                     // Update displays
                     updateDisplay();
-                    createMapVisualization(); // Refresh map
+                    updateMapVisualization(); // Use update instead of recreate
                 });
             }
         }, 0, (long)(2000 / gameState.getSimulationSpeed()));
@@ -284,7 +299,7 @@ public class GameViewController implements Initializable {
             chief.createCharacter(chief.randomCharacterData());
             gameState.addEvent("Character created at " + selectedLocation.getName());
             updateDisplay();
-            createMapVisualization();
+            updateMapVisualization(); // Update instead of recreate
         }
     }
     

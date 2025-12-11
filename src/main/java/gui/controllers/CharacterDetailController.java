@@ -92,8 +92,8 @@ public class CharacterDetailController implements Initializable {
     @FXML
     private void onFeed() {
         if (character != null) {
-            // Would need food reference here
-            System.out.println("Feed functionality - needs food reference");
+            // TODO: Implement feeding functionality with food selection
+            System.out.println("TODO: Feed functionality requires food reference from location");
         }
     }
     

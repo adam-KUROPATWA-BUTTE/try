@@ -33,11 +33,16 @@ public class AssetLoader {
         }
         
         try {
-            Image image = new Image(getClass().getResourceAsStream(path));
+            var stream = getClass().getResourceAsStream(path);
+            if (stream == null) {
+                System.err.println("Resource not found: " + path);
+                return null;
+            }
+            Image image = new Image(stream);
             imageCache.put(path, image);
             return image;
         } catch (Exception e) {
-            System.err.println("Failed to load image: " + path);
+            System.err.println("Failed to load image: " + path + " - " + e.getMessage());
             return null;
         }
     }

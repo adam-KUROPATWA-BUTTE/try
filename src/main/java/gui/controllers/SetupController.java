@@ -189,8 +189,9 @@ public class SetupController implements Initializable {
                 try {
                     Character character = createRandomCharacterForLocation(type, strength, random);
                     location.addCharacter(character);
-                } catch (Exception e) {
-                    // Skip if character can't be added
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Could not create character for location " + name + ": " + e.getMessage());
+                    // Skip this character and continue
                 }
             }
             
