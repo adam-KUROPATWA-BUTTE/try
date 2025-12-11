@@ -1,6 +1,7 @@
 import models.clanLeader.ClanLeader;
 import models.factory.CharacterFactory;
 import models.food.Food;
+import models.location.Battlefield;
 import models.location.Location;
 import models.location.LocationType;
 import models.people.Character;
@@ -27,7 +28,7 @@ public class Main {
         // Create locations
         Location gaulVillage = new Location("Asterix's Village", 150.0, LocationType.GAUL_TOWN);
         Location romanCamp = new Location("Aquarium Camp", 200.0, LocationType.ROMAIN_CAMP);
-        Location battlefield = new Location("Forest Battlefield", 300.0, LocationType.BATTLEFIELD);
+        Battlefield battlefield = new Battlefield("Forest Battlefield", 300.0);
         Location gaulRomanTown = new Location("Lutetia", 250.0, LocationType.GAUL_ROMAIN_VILLAGE);
         
         // Add locations to theater

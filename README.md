@@ -145,7 +145,47 @@ src/test/java/           # JUnit tests
 3. **Roman City** - All Romans
 4. **Gallo-Roman Town** - Both Gauls and Romans
 5. **Enclosure** - Creatures only
-6. **Battlefield** - All characters allowed
+6. **Battlefield** - All characters allowed (manual combat staging area)
+
+### Battlefield Manual Control System 🎮
+
+**NEW FEATURE**: Battlefields now provide full strategic control over combat!
+
+#### How It Works:
+- **Battlefields start EMPTY** - No auto-spawning of characters
+- **Manual character transfer** - You control who fights where
+- **Combat only starts when YOU trigger it** - No automatic battles
+- **Origin tracking** - Characters remember where they came from
+
+#### GUI Usage (Drag & Drop):
+1. Click on a location to view its characters
+2. **Drag a character** from the character list
+3. **Drop onto a battlefield** node on the map
+4. Repeat to add more fighters
+5. Select the battlefield to see the control panel:
+   - **Status indicator**: Shows WAITING, IN_COMBAT, or AFTERMATH
+   - **Start Battle button**: Enabled when you have 2+ characters with opposing factions (Gauls vs Romans)
+   - **Return All to Origins button**: Sends all characters back home
+
+#### Console/CLI Usage:
+Use the `battlefield` command in the ClanLeader menu:
+```
+battlefield <character_id> <battlefield_id>
+```
+- Lists your characters (use their index as character_id)
+- Lists available battlefields (use their index as battlefield_id)
+
+#### Strategic Benefits:
+- ✅ **Prepare characters** before battle (heal, feed, give potions)
+- ✅ **Choose your fighters** carefully
+- ✅ **Control when battles happen**
+- ✅ **Return survivors** to their origin locations
+- ✅ **Stage multiple battles** across different battlefields
+
+#### Battle Requirements:
+- At least **2 characters** present
+- Must have **opposing factions** (at least one Gaul AND one Roman)
+- Status shows ready indicator when conditions are met
 
 ### Food System
 
@@ -192,10 +232,10 @@ See `.github/workflows/maven.yml` for pipeline configuration.
 
 ## Java Concepts Demonstrated
 
-1. **Inheritance** - Character hierarchy
+1. **Inheritance** - Character hierarchy, Battlefield extends Location
 2. **Abstract Classes** - Base Character, Location classes
-3. **Interfaces** - Combatant, Leader (Dirigeant), Worker
-4. **Generics** - Type-safe collections
+3. **Interfaces** - Combatant, Leader (Dirigeant), Worker, Gaul, Roman
+4. **Generics** - Type-safe collections, Map<Character, Location>
 5. **Collections** - ArrayList, HashMap usage with iterators
 6. **Exceptions** - Custom exception handling
 7. **Design Patterns** - Factory, Singleton, Observer
@@ -203,9 +243,9 @@ See `.github/workflows/maven.yml` for pipeline configuration.
 9. **MVC Pattern** - Model-View-Controller architecture
 10. **Event-driven Programming** - GUI event handling
 11. **Property Binding** - Observable properties for reactive UI
-12. **Animations** - Transitions and visual effects
-9. **Sorting** - Custom sorting algorithms (planned)
-10. **Enums** - LocationType, Food, Sex, etc.
+12. **Drag and Drop** - JavaFX drag-and-drop API for character transfers
+13. **State Management** - Battlefield status (WAITING/IN_COMBAT/AFTERMATH)
+14. **Enums** - LocationType, Food, Sex, BattleStatus
 
 ## Documentation
 
@@ -235,6 +275,16 @@ See `.github/workflows/maven.yml` for pipeline configuration.
   - ✅ Character and location cards
   - ✅ Custom CSS theming (civilization style)
   - ✅ Animation utilities
+- ✅ **Battlefield Manual Control System** 🎮
+  - ✅ Battlefield class with state management
+  - ✅ Origin tracking for character returns
+  - ✅ Drag-and-drop character transfers (GUI)
+  - ✅ Battlefield control panel with Start Battle button
+  - ✅ Return survivors to origins feature
+  - ✅ Console command support
+  - ✅ Empty battlefield initialization
+  - ✅ Opposing faction detection
+  - ✅ Comprehensive test coverage (16 battlefield tests)
 
 ### In Progress
 - 🔄 Lycanthrope pack hierarchy visualization

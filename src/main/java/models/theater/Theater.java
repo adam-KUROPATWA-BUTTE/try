@@ -1,9 +1,12 @@
 package models.theater;
 
+import models.location.Battlefield;
 import models.location.Location;
+import models.people.Character;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Theater class that manages all locations in the simulation.
@@ -56,6 +59,44 @@ public class Theater {
             }
         }
         return null;
+    }
+
+    /**
+     * Transfer a character from their current location to a battlefield
+     * @param character the character to transfer
+     * @param origin the origin location where the character currently is
+     * @param battlefield the battlefield destination
+     * @return true if transfer was successful
+     */
+    public boolean transferCharacterToBattlefield(Character character, Location origin, Battlefield battlefield) {
+        if (character == null || origin == null || battlefield == null) {
+            return false;
+        }
+        
+        // Remove from origin
+        if (!origin.removeCharacter(character)) {
+            return false;
+        }
+        
+        // Add to battlefield with origin tracking
+        if (!battlefield.addCharacterFromOrigin(character, origin)) {
+            // If adding to battlefield fails, put character back to origin
+            origin.addCharacter(character);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Get all battlefields in the theater
+     * @return list of battlefields
+     */
+    public List<Battlefield> getBattlefields() {
+        return locations.stream()
+                .filter(loc -> loc instanceof Battlefield)
+                .map(loc -> (Battlefield) loc)
+                .collect(Collectors.toList());
     }
 
     @Override

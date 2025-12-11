@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import models.food.Food;
+import models.location.Battlefield;
 import models.location.Location;
 import models.location.LocationRestriction;
 import models.people.Blacksmith;
@@ -237,6 +238,22 @@ public class ClanLeader {
         newLocation.addCharacter(character);
     }
 
+    /**
+     * Transfer a character to a battlefield with origin tracking.
+     * This method properly tracks where the character came from for later return.
+     * 
+     * @param character the character to transfer
+     * @param battlefield the destination battlefield
+     * @return true if transfer was successful
+     */
+    public boolean transferCharacterToBattlefield(Character character, Battlefield battlefield) {
+        if (getLocation() == null || getTheater() == null) {
+            return false;
+        }
+        
+        return getTheater().transferCharacterToBattlefield(character, getLocation(), battlefield);
+    }
+
     @Override
     public String toString() {
         String loc = getLocation() == null ? "aucun" : getLocation().getName();
@@ -269,6 +286,43 @@ public class ClanLeader {
                 Location newLocation = getTheater().getLocations().get(Integer. parseInt(locId));
                 moveCharacter(newLocation, character);
                 return "The selected Character have move to selected location";
+            case "battlefield":
+                // Transfer character to battlefield
+                if (getLocation() == null || getTheater() == null) {
+                    return "Error: No location or theater assigned";
+                }
+                
+                try {
+                    int charIndex = Integer.parseInt(charId);
+                    int locIndex = Integer.parseInt(locId);
+                    
+                    List<Character> chars = getLocation().getCharacters();
+                    if (charIndex < 0 || charIndex >= chars.size()) {
+                        return "Error: Invalid character index. Available: 0-" + (chars.size() - 1);
+                    }
+                    
+                    Character charToTransfer = chars.get(charIndex);
+                    List<Battlefield> battlefields = getTheater().getBattlefields();
+                    
+                    if (battlefields.isEmpty()) {
+                        return "No battlefields available";
+                    }
+                    
+                    if (locIndex < 0 || locIndex >= battlefields.size()) {
+                        return "Error: Invalid battlefield index. Available: 0-" + (battlefields.size() - 1);
+                    }
+                    
+                    Battlefield battlefield = battlefields.get(locIndex);
+                    boolean success = transferCharacterToBattlefield(charToTransfer, battlefield);
+                    
+                    if (success) {
+                        return "Transferred " + charToTransfer.getName() + " to " + battlefield.getName();
+                    } else {
+                        return "Failed to transfer character";
+                    }
+                } catch (NumberFormatException e) {
+                    return "Error: Invalid number format. Use integers for character and battlefield IDs";
+                }
             case "create":
                 createCharacter(randomCharacterData());
                 return "Character successfully created";
