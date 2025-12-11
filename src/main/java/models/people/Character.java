@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static models.people.Gaul.availableFoods;
 
 public abstract class Character {
+    private static final int STRENGTH_MULTIPLIER = 100; // Converts strength decimal to combat damage
+    
     private final String name;
     private final char sex;
     private final double height;
@@ -48,7 +50,7 @@ public abstract class Character {
             return;
         }
         // Calculate damage: Attacker's Strength - (Defender's Endurance / 2) + Character Bonus
-        int damage = (int) (this.strength * 100 - (opponent.getEndurance() / 2.0) + this.getCombatBonus());
+        int damage = (int) (this.strength * STRENGTH_MULTIPLIER - (opponent.getEndurance() / 2.0) + this.getCombatBonus());
         damage = Math.max(1, damage); // Minimum 1 damage
         opponent.reduceHealth(damage);
     }
@@ -57,7 +59,7 @@ public abstract class Character {
      * Reduces health by the specified amount, clamping at 0.
      * @param damage The amount of damage to take
      */
-    public void reduceHealth(int damage) {
+    public void reduceHealth(double damage) {
         if (isDead()) {
             return;
         }

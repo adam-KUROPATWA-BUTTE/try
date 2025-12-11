@@ -21,6 +21,11 @@ import java.util.Objects;
  */
 
 public class Location {
+    
+    private static final int HERB_HEALING_AMOUNT = 50;
+    private static final int FOOD_HEALING_AMOUNT = 30;
+    private static final int HERB_SPAWN_AMOUNT = 2;
+    private static final int HERB_SPAWN_INTERVAL = 3;
 
     private final String name;
     private final double superficie;
@@ -91,11 +96,11 @@ public class Location {
     
     public void spawnHerbsIfNeeded() {
         turnsSinceLastHerbSpawn++;
-        if (turnsSinceLastHerbSpawn >= 3) {
+        if (turnsSinceLastHerbSpawn >= HERB_SPAWN_INTERVAL) {
             // Healing herbs spawn every 3 turns in villages
             if (type == LocationType.GAUL_TOWN || type == LocationType.ROMAIN_TOWN || 
                 type == LocationType.GAUL_ROMAIN_VILLAGE) {
-                healingHerbs += 2;
+                healingHerbs += HERB_SPAWN_AMOUNT;
                 turnsSinceLastHerbSpawn = 0;
             }
         }
@@ -143,11 +148,11 @@ public class Location {
         // Try to use healing herbs first
         if (healingHerbs > 0) {
             healingHerbs--;
-            c.heal(50); // Herbs heal 50 HP
+            c.heal(HERB_HEALING_AMOUNT);
         } else if (!foods.isEmpty()) {
             // Use food as alternative
             Food food = foods.remove(0);
-            c.heal(30); // Food heals 30 HP
+            c.heal(FOOD_HEALING_AMOUNT);
         } else {
             throw new IllegalStateException("No healing resources available!");
         }
