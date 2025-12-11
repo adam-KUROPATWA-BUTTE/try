@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import models.clanLeader.ClanLeader;
 import models.factory.CharacterFactory;
 import models.food.Food;
+import models.location.Battlefield;
 import models.location.Location;
 import models.location.LocationType;
 import models.people.Character;
@@ -90,7 +91,7 @@ public class SetupController implements Initializable {
         // Create default locations
         Location gaulVillage = new Location("Asterix's Village", 150.0, LocationType.GAUL_TOWN);
         Location romanCamp = new Location("Aquarium Camp", 200.0, LocationType.ROMAIN_CAMP);
-        Location battlefield = new Location("Forest Battlefield", 300.0, LocationType.BATTLEFIELD);
+        Battlefield battlefield = new Battlefield("Forest Battlefield", 300.0);
         Location gaulRomanTown = new Location("Lutetia", 250.0, LocationType.GAUL_ROMAIN_VILLAGE);
         Location enclosure = new Location("Dark Forest", 180.0, LocationType.ENCLOSURE);
         
@@ -176,7 +177,14 @@ public class SetupController implements Initializable {
         for (int i = 0; i < locationCount; i++) {
             LocationType type = locationTypes[i % locationTypes.length];
             String name = locationNames[i % locationNames.length] + " " + (i + 1);
-            Location location = new Location(name, defaultArea, type);
+            
+            // Create Battlefield instances for battlefield type, regular Location for others
+            Location location;
+            if (type == LocationType.BATTLEFIELD) {
+                location = new Battlefield(name, defaultArea);
+            } else {
+                location = new Location(name, defaultArea, type);
+            }
             
             if (firstLocation == null) {
                 firstLocation = location;
@@ -184,14 +192,16 @@ public class SetupController implements Initializable {
             
             theater.addLocation(location);
             
-            // Add characters
-            for (int j = 0; j < charactersPerLoc; j++) {
-                try {
-                    Character character = createRandomCharacterForLocation(type, strength, random);
-                    location.addCharacter(character);
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Could not create character for location " + name + ": " + e.getMessage());
-                    // Skip this character and continue
+            // Add characters ONLY to non-battlefield locations (battlefields start empty)
+            if (type != LocationType.BATTLEFIELD) {
+                for (int j = 0; j < charactersPerLoc; j++) {
+                    try {
+                        Character character = createRandomCharacterForLocation(type, strength, random);
+                        location.addCharacter(character);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Could not create character for location " + name + ": " + e.getMessage());
+                        // Skip this character and continue
+                    }
                 }
             }
             

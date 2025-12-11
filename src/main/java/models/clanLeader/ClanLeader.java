@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import models.food.Food;
+import models.location.Battlefield;
 import models.location.Location;
 import models.location.LocationRestriction;
 import models.people.Blacksmith;
@@ -235,6 +236,22 @@ public class ClanLeader {
     public void moveCharacter(Location newLocation, Character character) {
         getLocation().removeCharacter(character);
         newLocation.addCharacter(character);
+    }
+
+    /**
+     * Transfer a character to a battlefield with origin tracking.
+     * This method properly tracks where the character came from for later return.
+     * 
+     * @param character the character to transfer
+     * @param battlefield the destination battlefield
+     * @return true if transfer was successful
+     */
+    public boolean transferCharacterToBattlefield(Character character, Battlefield battlefield) {
+        if (getLocation() == null || getTheater() == null) {
+            return false;
+        }
+        
+        return getTheater().transferCharacterToBattlefield(character, getLocation(), battlefield);
     }
 
     @Override

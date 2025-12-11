@@ -4,6 +4,7 @@
 /home/runner/work/try/try/src/main/java/models/theater/Theater.java
 /home/runner/work/try/try/src/main/java/models/people/Worker.java
 /home/runner/work/try/try/src/main/java/gui/components/CharacterCard.java
+/home/runner/work/try/try/src/main/java/models/location/Battlefield.java
 /home/runner/work/try/try/src/main/java/models/people/Roman.java
 /home/runner/work/try/try/src/main/java/models/people/General.java
 /home/runner/work/try/try/src/main/java/models/exceptions/LocationAccessDeniedException.java
